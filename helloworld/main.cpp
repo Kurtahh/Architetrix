@@ -22,7 +22,7 @@ struct Terminal
 
 int pos = 0;
 int row = 0;
-bool dropped = false;
+bool dropped = true;
 bool running = true;
 
 void render()
@@ -48,6 +48,10 @@ void gravity()
         if (dropped && row < 7){
             row++;
             render();
+        } else if (dropped && row == 7) {
+            row = 0;
+            pos = 0;
+            render();
         }
     }
 }
@@ -55,6 +59,11 @@ void gravity()
 int main()
 {
     Terminal term;
+
+    std::cout << "Controls:\n";
+    std::cout << "  a - move left\n";
+    std::cout << "  d - move right\n";
+    std::cout << "  q - quit\n\n";
 
     for (int i = 0; i < 8; i++){
         std::cout << "\n";
@@ -69,13 +78,11 @@ int main()
             running = false;
             break;
         }
-        if (!(dropped && row == 7)){
+        if (row != 7){
             if (c == 'a' && pos > 0)
                 pos--;
             else if (c == 'd')
                 pos++;
-            else if (c == ' ' && !dropped)
-                dropped = true;
         }
         render();
     }
