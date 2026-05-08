@@ -12,6 +12,7 @@ class Piece{
     public:
     Piece(std::vector<std::vector<bool>>);
     std::vector<std::vector<bool>> getRows();
+    std::vector<std::vector<bool>>& Piece::getRowsRef();
     int getWidth();
     int getHeight();
     std::string toString();
