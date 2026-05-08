@@ -2,17 +2,20 @@
 #define PIECE_H
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 class Piece{
-    std::vector<std::vector<bool>> bits;
+    std::vector<std::vector<bool>> rows;
     int width;
-    int height;
 
     public:
-    std::vector<std::vector<bool>> getBits();
+    Piece(std::vector<std::vector<bool>>);
+    std::vector<std::vector<bool>> getRows();
     int getWidth();
     int getHeight();
-    void setBits(std::vector<std::vector<bool>> newBits);
+    std::string toString();
+    std::string toDebugString();
 };
 
 #endif
