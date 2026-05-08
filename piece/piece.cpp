@@ -13,6 +13,9 @@ Piece::Piece(vector<vector<bool>> setRows) {
 vector<vector<bool>> Piece::getRows() {
     return rows;
 }
+vector<vector<bool>>& Piece::getRowsRef() {
+    return rows;
+}
 int Piece::getWidth() {
     return width;
 }
