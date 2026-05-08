@@ -1,19 +1,39 @@
 #include "piece.h"
 using namespace std;
 
-vector<vector<bool>> Piece::getBits() {
-    return bits;
+Piece::Piece(vector<vector<bool>> setRows) {
+    rows = setRows;
+    int maxWidth = rows.at(0).size();
+    for(auto line : rows){
+        if(maxWidth < line.size()) maxWidth = line.size();
+    }
+    width = maxWidth;
+}
+
+vector<vector<bool>> Piece::getRows() {
+    return rows;
 }
 int Piece::getWidth() {
     return width;
 }
 int Piece::getHeight() {
-    return bits.size();
+    return rows.size();
 }
 
-void Piece::setBits(vector<vector<bool>> newBits) {
-    bits = newBits;
-    //ENDED HERE, HAVE TO REDETERMINE THE WIDTH FIELD FOR NEW BITS
-    //for()
+string Piece::toString() {
+    stringstream ss;
+    for(auto& row : rows){
+        for(bool bit : row){
+            ss << bit;
+        }
+        ss << '\n';
+    }
+    return ss.str();
+}
+string Piece::toDebugString() {
+    stringstream ss;
+    //width height
+    ss << width << " " << rows.size();
+    return ss.str();
 }
 
