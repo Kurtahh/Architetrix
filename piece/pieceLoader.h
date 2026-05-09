@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <fstream>
+#include <random>
 #include "piece.h"
 
 class PieceLoader {
@@ -15,6 +16,7 @@ class PieceLoader {
 
     public:
     PieceLoader();
+    Piece getRandomPiece(int difficulty) const;
     std::vector<Piece> getEasy();
     std::vector<Piece> getMedium();
     std::vector<Piece> getHard();
