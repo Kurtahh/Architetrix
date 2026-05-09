@@ -49,6 +49,18 @@ PieceLoader::PieceLoader()
     loadPieces();
 }
 
+Piece PieceLoader::getRandomPiece(int difficulty) const
+{
+    static mt19937 rng(random_device{}());
+    const vector<Piece>* chosenPool;
+    /*if(difficulty == 1)*/ chosenPool = &easyPieces;
+    if(difficulty == 2) chosenPool = &mediumPieces;
+    if(difficulty == 3) chosenPool = &hardPieces;
+    uniform_int_distribution<int> dist(0, chosenPool->size() - 1);
+    int index = dist(rng);
+    return (*chosenPool)[index];
+}
+
 vector<Piece> PieceLoader::getEasy()
 {
     return easyPieces;
