@@ -10,20 +10,20 @@ Piece::Piece(vector<vector<bool>> setRows) {
     width = maxWidth;
 }
 
-vector<vector<bool>> Piece::getRows() {
+vector<vector<bool>> Piece::getRows() const{
     return rows;
 }
 vector<vector<bool>>& Piece::getRowsRef() {
     return rows;
 }
-int Piece::getWidth() {
+int Piece::getWidth() const{
     return width;
 }
-int Piece::getHeight() {
+int Piece::getHeight() const{
     return rows.size();
 }
 
-string Piece::toString() {
+string Piece::toString() const{
     stringstream ss;
     for(auto& row : rows){
         for(bool bit : row){
@@ -33,7 +33,7 @@ string Piece::toString() {
     }
     return ss.str();
 }
-string Piece::toDebugString() {
+string Piece::toDebugString() const{
     stringstream ss;
     //width height
     ss << width << " " << rows.size();
