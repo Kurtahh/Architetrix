@@ -10,16 +10,16 @@ class FallingPiece {
     int y;
 
     public:
-    FallingPiece(const Piece& setPiece);
+    FallingPiece(const Piece& setPiece); //initializes x and y to 0 (idk what we should initialize them to rn cuz that depends on board logic)
 
-    Piece getPiece();
-    int getX();
-    int getY();
-    void setPiece(const Piece& newPiece);
+    Piece getPiece() const; //standard  getters and setters for each field
+    int getX() const;
+    int getY() const;
+    void setPiece(const Piece& newPiece); 
     void setX(int newX);
     void setY(int newY);
 
-    void invertBits();
+    void invertBits(); //calls piece.getRowsRef() to flip each bit in piece
 };
 
 #endif

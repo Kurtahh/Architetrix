@@ -6,13 +6,13 @@ FallingPiece::FallingPiece(const Piece& setPiece) :
     x(0),
     y(0) {}
 
-Piece FallingPiece::getPiece() {
+Piece FallingPiece::getPiece() const{
     return piece;
 }
-int FallingPiece::getX() {
+int FallingPiece::getX() const{
     return x;
 }
-int FallingPiece::getY() {
+int FallingPiece::getY() const{
     return y;
 }
 

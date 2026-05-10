@@ -61,15 +61,15 @@ Piece PieceLoader::getRandomPiece(int difficulty) const
     return (*chosenPool)[index];
 }
 
-vector<Piece> PieceLoader::getEasy()
+vector<Piece> PieceLoader::getEasy() const
 {
     return easyPieces;
 }
-vector<Piece> PieceLoader::getMedium()
+vector<Piece> PieceLoader::getMedium() const
 {
     return mediumPieces;
 }
-vector<Piece> PieceLoader::getHard()
+vector<Piece> PieceLoader::getHard() const
 {
     return hardPieces;
 }

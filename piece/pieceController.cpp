@@ -41,19 +41,23 @@ void PieceController::holdFalling()
     hasHeld = true;
 }
 
-FallingPiece PieceController::getFalling() {
+FallingPiece PieceController::getFalling() const{
     return falling;
 }
 
-optional<Piece> PieceController::getHeld() {
+FallingPiece PieceController::getPrev() const{
+    return prevFalling;
+}
+
+optional<Piece> PieceController::getHeld() const{
     return held;
 }
 
-deque<Piece> PieceController::getUpcoming() {
+deque<Piece> PieceController::getUpcoming() const{
     return upcoming;
 }
 
-int PieceController::getDifficulty() {
+int PieceController::getDifficulty() const{
     return difficulty;
 }
 
