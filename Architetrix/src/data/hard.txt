@@ -1,0 +1,11 @@
+# Hard difficulty pieces (complex multi-row patterns)
+111111,
+101101,
+001110,
+10101
+1001,
+111001,
+011011,
+101010,
+1111001,
+10010001,
