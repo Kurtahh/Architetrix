@@ -151,6 +151,7 @@ void GameLoop::checkLevelUp() {
     int newLevel = (score_ / LEVEL_THRESHOLD) + 1;
     if (newLevel > level_) {
         level_ = newLevel;
+        pieceController_->setLevel(level_);
         state_ = GameState::NEW_LEVEL;
         // Brief pause / visual cue could go here
         state_ = GameState::FALLING;

@@ -3,7 +3,7 @@
 
 #include "../board/Board.h"
 
-/// Forward declaration (defined in your friend's module)
+/// Forward declaration
 class FallingPiece;
 
 /// Applies bitwise operations between a falling piece and board rows.

@@ -12,7 +12,6 @@ enum class Action {
 };
 
 /// Reads a single raw keypress and maps it to a game Action.
-/// Relies on termios raw mode being active (set up by Terminal in main).
 class InputReader {
 public:
     /// Blocking read of one character; returns the corresponding Action.
