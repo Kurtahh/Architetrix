@@ -38,8 +38,13 @@ void Board::removeColumn(int col) {
     if (col < 0 || col >= WIDTH)
         throw std::out_of_range("Board::removeColumn: col out of range");
     for (auto& row : rows_) {
-        if (col < static_cast<int>(row.bits.size()))
-            row.bits.erase(row.bits.begin() + col);
+        // Ensure row is at full width, then set the column to 0
+        if (row.bits.size() < static_cast<size_t>(WIDTH)) {
+            row.bits.resize(WIDTH, false);
+        }
+        if (col < static_cast<int>(row.bits.size())) {
+            row.bits[col] = false;
+        }
     }
 }
 

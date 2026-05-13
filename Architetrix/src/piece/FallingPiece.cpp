@@ -30,7 +30,8 @@ void FallingPiece::moveLeft() {
 }
 
 void FallingPiece::moveRight() { 
-    ++col_; 
+    if (piece_ && col_ + piece_->getWidth() < Board::WIDTH)
+        ++col_; 
 }
 
 void FallingPiece::stepDown() { 
