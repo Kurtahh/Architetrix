@@ -54,5 +54,5 @@ void FallingPiece::invertBits() {
 
 void FallingPiece::hardDrop(const Board& board) {
     int stackTop = Board::VISIBLE_HEIGHT - board.getHeight();
-    row_ = stackTop > 0 ? stackTop - 1 : 0;
+    row_ = stackTop;
 }
