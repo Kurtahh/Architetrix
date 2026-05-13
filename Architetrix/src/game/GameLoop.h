@@ -9,6 +9,7 @@
 #include "../engine/EliminationChecker.h"
 #include "../input/InputReader.h"
 #include "../render/Renderer.h"
+#include <chrono>
 
 class PieceController;
 
@@ -26,6 +27,7 @@ public:
     int getScore() const;
     int getLevel() const;
     GameState getGameState() const;
+    int getRowAddTimeRemainingMs() const;
 
 private:
     /// --- Internal tick helpers ---
@@ -52,13 +54,19 @@ private:
     int level_ = 1;
 
     bool running_ = false;
-    int landingCount_ = 0;  // triggers new row every N landings TO CHANGE
+    std::chrono::system_clock::time_point lastRowAddTime_;  // tracks last row addition
 
     // Level-up threshold: every N points → level++
     static constexpr int LEVEL_THRESHOLD = 500;
 
     // Gravity interval in milliseconds (decreases with level)
     int gravityMs() const;
+    
+    // Row addition interval in milliseconds (decreases with level)
+    int rowAddIntervalMs() const;
+    
+    // Checks if it's time to add a new row and adds it if needed
+    void checkAndAddRow();
 };
 
 #endif

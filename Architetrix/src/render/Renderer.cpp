@@ -8,10 +8,11 @@ void Renderer::draw(const Board& board,
                     const Piece* upcomingPiece,
                     const Piece* heldPiece,
                     int score,
-                    int level) const {
+                    int level,
+                    int rowAddTimeRemainingMs) const {
     clearScreen();      // full clear so empty rows above stack are visible
     drawBoard(board, fallingPiece);
-    drawSidebar(upcomingPiece, heldPiece, score, level);
+    drawSidebar(upcomingPiece, heldPiece, score, level, rowAddTimeRemainingMs);
     std::cout << std::flush;
 }
 
@@ -69,7 +70,7 @@ void Renderer::drawBoard(const Board& board, const FallingPiece* piece) const {
     }
 }
 
-void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, int level) const {
+void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, int level, int rowAddTimeRemainingMs) const {
     std::cout << "\r\033[2K" << "Score: " << score << "   Level: " << level << "\n";
 
     std::cout << "\r\033[2K";
@@ -87,6 +88,8 @@ void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, 
             std::cout << (b ? '1' : '0');
     }
     std::cout << "\n";
+
+    std::cout << "\r\033[2K" << "Next row in: " << (rowAddTimeRemainingMs / 1000) << "s\n";
 }
 
 std::string Renderer::opLabel(Board::Operator op) {

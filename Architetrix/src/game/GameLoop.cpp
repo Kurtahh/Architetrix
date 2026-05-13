@@ -34,15 +34,18 @@ void GameLoop::init() {
     pieceController_->spawnNext();
     running_ = true;
     gRunning.store(true);
+    lastRowAddTime_ = std::chrono::system_clock::now();
 }
 
 void GameLoop::run() {
-    // Gravity thread: advances piece down on a timer
+    // Gravity thread: advances piece down on a timer and checks for row additions
     std::thread gravThread([this]() {
         while (gRunning.load()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(gravityMs()));
-            if (state_ == GameState::FALLING)
+            if (state_ == GameState::FALLING) {
                 tick();
+                checkAndAddRow();
+            }
         }
     });
 
@@ -51,7 +54,7 @@ void GameLoop::run() {
                    pieceController_->getFallingPiece(),
                    pieceController_->getUpcomingPiece(),
                    pieceController_->getHeldPiece(),
-                   score_, level_);
+                   score_, level_, getRowAddTimeRemainingMs());
 
     while (running_) {
         Action action = inputReader_.readInput();
@@ -66,7 +69,7 @@ void GameLoop::run() {
                        pieceController_->getFallingPiece(),
                        pieceController_->getUpcomingPiece(),
                        pieceController_->getHeldPiece(),
-                       score_, level_);
+                       score_, level_, getRowAddTimeRemainingMs());
     }
 
     gRunning.store(false);
@@ -116,7 +119,7 @@ void GameLoop::tick() {
                    pieceController_->getFallingPiece(),
                    pieceController_->getUpcomingPiece(),
                    pieceController_->getHeldPiece(),
-                   score_, level_);
+                   score_, level_, getRowAddTimeRemainingMs());
 }
 
 void GameLoop::applyCollision() {
@@ -129,12 +132,6 @@ void GameLoop::applyCollision() {
 
     auto clearResult = eliminationChecker_.checkAndClear(board_);
     score_ += clearResult.scoreGained;
-
-    // Add a new row from the bottom every 3 landings (difficulty pressure)
-    ++landingCount_;
-
-    if (landingCount_ % 3 == 0)
-        board_.addRowAtBottom(rowGenerator_.generate(level_));
 
     if (board_.isOverflowed()) {
         endGame();
@@ -182,4 +179,36 @@ int GameLoop::gravityMs() const {
     // 500ms at level 1, floors at 100ms
     int ms = 500 - (level_ - 1) * 40;
     return ms < 100 ? 100 : ms;
+}
+
+int GameLoop::rowAddIntervalMs() const {
+    // 6000ms (6 seconds) at level 1, decreases by 300ms per level, floors at 1000ms (1 second)
+    int ms = 6000 - (level_ - 1) * 300;
+    return ms < 1000 ? 1000 : ms;
+}
+
+void GameLoop::checkAndAddRow() {
+    auto now = std::chrono::system_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - lastRowAddTime_
+    ).count();
+
+    if (elapsed >= rowAddIntervalMs()) {
+        board_.addRowAtBottom(rowGenerator_.generate(level_));
+        lastRowAddTime_ = now;
+
+        if (board_.isOverflowed()) {
+            endGame();
+        }
+    }
+}
+
+int GameLoop::getRowAddTimeRemainingMs() const {
+    auto now = std::chrono::system_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - lastRowAddTime_
+    ).count();
+    
+    int remaining = rowAddIntervalMs() - elapsed;
+    return remaining > 0 ? remaining : 0;
 }

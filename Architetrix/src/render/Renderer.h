@@ -17,11 +17,12 @@ public:
               const Piece* upcomingPiece,
               const Piece* heldPiece,
               int score,
-              int level) const;
+              int level,
+              int rowAddTimeRemainingMs = 0) const;
 
 private:
     void drawBoard(const Board& board, const FallingPiece* piece) const;
-    void drawSidebar(const Piece* upcoming, const Piece* held, int score, int level) const;
+    void drawSidebar(const Piece* upcoming, const Piece* held, int score, int level, int rowAddTimeRemainingMs) const;
     void drawRow(const Board::Row& row, int fallingCol, const std::vector<bool>* pieceBits) const;
 
     // Maps operator enum to display string.
