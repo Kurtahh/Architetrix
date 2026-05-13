@@ -19,6 +19,7 @@ class PieceController {
     std::deque<const Piece*> upcoming_;
 
     bool holdUsedThisPiece_ = false;  //hold is once-per-piece
+    int currentLevel_ = 1;  // track current level for piece difficulty
 
     //pick a random piece based on level
     const Piece* pickRandom() const;
@@ -34,6 +35,9 @@ class PieceController {
 
     //spawns the next piece from the upcoming queue (refills queue if needed)
     void spawnNext();
+
+    //updates the current level for piece difficulty scaling
+    void setLevel(int level);
 
     //movement is delegated to FallingPiece
     void moveLeft();
