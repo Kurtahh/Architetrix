@@ -1,0 +1,4 @@
+#ifndef SCORE_MANAGER_H_422211
+#define SCORE_MANAGER_H_422211
+
+#endif

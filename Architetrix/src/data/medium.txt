@@ -1,0 +1,10 @@
+# Medium difficulty pieces (multi-row patterns)
+11011,
+101
+110,
+1001
+0110,
+10001,
+11101,
+01010,
+1010,
