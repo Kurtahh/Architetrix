@@ -14,30 +14,6 @@
 class PieceController;
 
 class GameLoop {
-public:
-    GameLoop();
-    ~GameLoop();
-
-    /// Initialise board, spawn first piece, print instructions.
-    void init();
-
-    /// Blocking: runs until state == GAME_ENDED.
-    void run();
-
-    int getScore() const;
-    int getLevel() const;
-    GameState getGameState() const;
-    int getRowAddTimeRemainingMs() const;
-
-private:
-    /// --- Internal tick helpers ---
-    void handleInput(Action action);
-    void tick(); // gravity + state transitions
-    void applyCollision(); // bitwise merge + elimination
-    void spawnNewPiece();
-    void checkLevelUp();
-    void endGame();
-
     Board board_;
     RowGenerator rowGenerator_;
     BitwiseEngine bitwiseEngine_;
@@ -59,6 +35,14 @@ private:
     // Level-up threshold: every N points → level++
     static constexpr int LEVEL_THRESHOLD = 500;
 
+    /// --- Internal tick helpers ---
+    void handleInput(Action action);
+    void tick(); // gravity + state transitions
+    void applyCollision(); // bitwise merge + elimination
+    void spawnNewPiece();
+    void checkLevelUp();
+    void endGame();
+
     // Gravity interval in milliseconds (decreases with level)
     int gravityMs() const;
     
@@ -67,6 +51,21 @@ private:
     
     // Checks if it's time to add a new row and adds it if needed
     void checkAndAddRow();
+    
+    public:
+    GameLoop();
+    ~GameLoop();
+
+    /// Initialise board, spawn first piece, print instructions.
+    void init();
+
+    /// Blocking: runs until state == GAME_ENDED.
+    void run();
+
+    int getScore() const;
+    int getLevel() const;
+    GameState getGameState() const;
+    int getRowAddTimeRemainingMs() const;
 };
 
 #endif

@@ -13,12 +13,11 @@ enum class Action {
 
 /// Reads a single raw keypress and maps it to a game Action.
 class InputReader {
-public:
+    Action mapChar(char c) const;
+    
+    public:
     /// Blocking read of one character; returns the corresponding Action.
     Action readInput() const;
-
-private:
-    Action mapChar(char c) const;
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include <cstdint>
 
 class Board {
-public:
+    public:
     enum class Operator { AND, OR, XOR, NAND, NOR };
 
     struct Row {
@@ -44,7 +44,7 @@ public:
     /// Returns true if the stack has grown to fill the entire visible area.
     bool isOverflowed() const;
 
-private:
+    private:
     std::vector<Row> rows_;
 };
 

@@ -6,7 +6,7 @@
 /// Checks for and clears full rows, full columns, and cross (perfect) clears.
 /// Returns the score for the current placement.
 class EliminationChecker {
-public:
+    public:
     struct ClearResult {
         int rowsCleared = 0;
         int colsCleared = 0;
@@ -17,7 +17,7 @@ public:
     /// Scan the board, remove completed rows/cols, return scoring info.
     ClearResult checkAndClear(Board& board) const;
 
-private:
+    private:
     /// A row is "full" when every bit is true.
     bool isRowFull(const Board::Row& row) const;
 
