@@ -31,7 +31,7 @@ class PieceController {
     void spawnPiece(const Piece* piece);
     
     public:
-    explicit PieceController(const std::string& piecesFile = "pieces.txt");
+    explicit PieceController();
 
     //spawns the next piece from the upcoming queue (refills queue if needed)
     void spawnNext();

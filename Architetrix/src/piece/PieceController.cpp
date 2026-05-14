@@ -4,8 +4,7 @@
 #include <stdexcept>
 #include <random>
 
-PieceController::PieceController(const std::string& piecesFile) {
-    (void)piecesFile;  //parameter ignored, pieces loaded from data files
+PieceController::PieceController() {
     loader_.loadPieces();
     refillQueue(3);
 }
