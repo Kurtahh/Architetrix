@@ -51,10 +51,11 @@ void GameLoop::run() {
 
     // Main thread: input loop
     renderer_.draw(board_,
-                   pieceController_->getFallingPiece(),
-                   pieceController_->getUpcomingPiece(),
-                   pieceController_->getHeldPiece(),
-                   score_, level_, getRowAddTimeRemainingMs());
+               pieceController_->getFallingPiece(),
+               pieceController_->getUpcomingPiece(),
+               pieceController_->getHeldPiece(),
+               score_, level_, getRowAddTimeRemainingMs(),
+               scoreManager_.getPersonalRecord());
 
     while (running_) {
         Action action = inputReader_.readInput();
@@ -66,15 +67,20 @@ void GameLoop::run() {
 
         handleInput(action);
         renderer_.draw(board_,
-                       pieceController_->getFallingPiece(),
-                       pieceController_->getUpcomingPiece(),
-                       pieceController_->getHeldPiece(),
-                       score_, level_, getRowAddTimeRemainingMs());
+               pieceController_->getFallingPiece(),
+               pieceController_->getUpcomingPiece(),
+               pieceController_->getHeldPiece(),
+               score_, level_, getRowAddTimeRemainingMs(),
+               scoreManager_.getPersonalRecord());
     }
 
     gRunning.store(false);
     gravThread.join();
-    std::cout << "\nGame over! Final score: " << score_ << "\n";
+    if (newRecordThisGame_) {
+        std::cout << "\nGame over! New highscore: " << score_ << "\n";
+    } else {
+        std::cout << "\nGame over! Final score: " << score_ << "\n";
+    }
 }
 
 void GameLoop::handleInput(Action action) {
@@ -116,10 +122,11 @@ void GameLoop::tick() {
     }
 
     renderer_.draw(board_,
-                   pieceController_->getFallingPiece(),
-                   pieceController_->getUpcomingPiece(),
-                   pieceController_->getHeldPiece(),
-                   score_, level_, getRowAddTimeRemainingMs());
+               pieceController_->getFallingPiece(),
+               pieceController_->getUpcomingPiece(),
+               pieceController_->getHeldPiece(),
+               score_, level_, getRowAddTimeRemainingMs(),
+               scoreManager_.getPersonalRecord());
 }
 
 void GameLoop::applyCollision() {
@@ -132,6 +139,9 @@ void GameLoop::applyCollision() {
 
     auto clearResult = eliminationChecker_.checkAndClear(board_);
     score_ += clearResult.scoreGained;
+    if (scoreManager_.updateRecord(score_)) {
+        newRecordThisGame_ = true;
+    }
 
     if (board_.isOverflowed()) {
         endGame();
@@ -159,6 +169,7 @@ void GameLoop::checkLevelUp() {
 }
 
 void GameLoop::endGame() {
+    scoreManager_.updateRecord(score_);
     running_ = false;
     gRunning.store(false);
     state_ = GameState::GAME_ENDED;
@@ -212,4 +223,8 @@ int GameLoop::getRowAddTimeRemainingMs() const {
     
     int remaining = rowAddIntervalMs() - elapsed;
     return remaining > 0 ? remaining : 0;
+}
+
+int GameLoop::getPersonalRecord() const {
+    return scoreManager_.getPersonalRecord();
 }

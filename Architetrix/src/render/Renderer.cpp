@@ -9,10 +9,11 @@ void Renderer::draw(const Board& board,
                     const Piece* heldPiece,
                     int score,
                     int level,
-                    int rowAddTimeRemainingMs) const {
-    clearScreen();      // full clear so empty rows above stack are visible
+                    int rowAddTimeRemainingMs,
+                    int personalRecord) const {
+    clearScreen();
     drawBoard(board, fallingPiece);
-    drawSidebar(upcomingPiece, heldPiece, score, level, rowAddTimeRemainingMs);
+    drawSidebar(upcomingPiece, heldPiece, score, level, rowAddTimeRemainingMs, personalRecord);
     std::cout << std::flush;
 }
 
@@ -89,9 +90,8 @@ void Renderer::drawBoard(const Board& board, const FallingPiece* piece) const {
     }
 }
 
-void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, int level, int rowAddTimeRemainingMs) const {
-    std::cout << "\r\033[2K" << "Score: " << score << "   Level: " << level << "\n";
-
+void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, int level, int rowAddTimeRemainingMs, int personalRecord) const {
+    std::cout << "\r\033[2K" << "Score: " << score << "   Level: " << level << "  Highscore: " << personalRecord << "\n";
     std::cout << "\r\033[2K";
     if (upcoming) {
         std::cout << "Next:  ";
@@ -99,7 +99,6 @@ void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, 
             std::cout << (b ? '1' : '0');
     }
     std::cout << "\n";
-
     std::cout << "\r\033[2K";
     if (held) {
         std::cout << "Hold:  ";
@@ -107,7 +106,6 @@ void Renderer::drawSidebar(const Piece* upcoming, const Piece* held, int score, 
             std::cout << (b ? '1' : '0');
     }
     std::cout << "\n";
-
     std::cout << "\r\033[2K" << "Next row in: " << (rowAddTimeRemainingMs / 1000) << "s\n";
 }
 

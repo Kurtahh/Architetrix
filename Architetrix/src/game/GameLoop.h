@@ -9,6 +9,7 @@
 #include "../engine/EliminationChecker.h"
 #include "../input/InputReader.h"
 #include "../render/Renderer.h"
+#include "../save/ScoreManager.h"
 #include <chrono>
 
 class PieceController;
@@ -21,6 +22,7 @@ class GameLoop {
     EliminationChecker eliminationChecker_;
     InputReader inputReader_;
     Renderer renderer_;
+    ScoreManager scoreManager_;
 
     PieceController* pieceController_ = nullptr;
 
@@ -31,6 +33,7 @@ class GameLoop {
 
     bool running_ = false;
     std::chrono::system_clock::time_point lastRowAddTime_;  // tracks last row addition
+    bool newRecordThisGame_ = false;
 
     // Level-up threshold: every N points → level++
     static constexpr int LEVEL_THRESHOLD = 500;
@@ -66,6 +69,8 @@ class GameLoop {
     int getLevel() const;
     GameState getGameState() const;
     int getRowAddTimeRemainingMs() const;
+
+    int getPersonalRecord() const;
 };
 
 #endif

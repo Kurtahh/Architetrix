@@ -34,7 +34,8 @@ SRCS := \
 	src/piece/Piece.cpp \
 	src/piece/FallingPiece.cpp \
 	src/piece/PieceLoader.cpp \
-	src/piece/PieceController.cpp
+	src/piece/PieceController.cpp \
+	src/save/ScoreManager.cpp
 
 OBJS := $(SRCS:.cpp=.o)
 
