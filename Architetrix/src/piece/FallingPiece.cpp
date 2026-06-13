@@ -57,3 +57,8 @@ void FallingPiece::hardDrop(const Board& board) {
     int stackTop = Board::VISIBLE_HEIGHT - board.getHeight();
     row_ = stackTop;
 }
+
+int FallingPiece::getGhostRow(const Board& board) const {
+    int stackTop = Board::VISIBLE_HEIGHT - board.getHeight();
+    return stackTop - 1;
+}

@@ -34,6 +34,8 @@ class FallingPiece {
     void hardDrop(const Board& board);
 
     const Piece* getPiece() const;
+
+    int getGhostRow(const Board& board) const;
 };
 
 #endif

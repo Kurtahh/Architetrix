@@ -18,48 +18,67 @@ void Renderer::draw(const Board& board,
 
 void Renderer::drawBoard(const Board& board, const FallingPiece* piece) const {
     const auto& rows = board.getRows();
-    int stackTop = Board::VISIBLE_HEIGHT - board.getHeight();  // first filled visible row
+    int stackTop = Board::VISIBLE_HEIGHT - board.getHeight();
+
+    int ghostRow = piece ? piece->getGhostRow(board) : -1;
 
     for (int visRow = 0; visRow < Board::VISIBLE_HEIGHT; ++visRow) {
-        std::cout << "\r\033[2K";  // clear line
+        std::cout << "\r\033[2K";
 
         if (visRow < stackTop) {
-            // Empty space above the stack — draw the piece if it's on this row
-            if (piece && piece->getRow() == visRow) {
-                std::cout << "     |";  // blank label
+            bool isPieceRow = piece && piece->getRow() == visRow;
+            bool isGhostRow = piece && ghostRow == visRow && !isPieceRow;
+
+            if (isPieceRow || isGhostRow) {
+                std::cout << "     |";
                 const auto& pieceBits = piece->getBits();
                 int pieceCol = piece->getCol();
                 for (int c = 0; c < Board::WIDTH; ++c) {
                     int pIdx = c - pieceCol;
                     bool hasBit = pIdx >= 0 && pIdx < static_cast<int>(pieceBits.size());
-                    if (hasBit)
-                        std::cout << (pieceBits[pIdx] ? "\033[1m1\033[0m" : "\033[1m0\033[0m");
-                    else
+                    if (hasBit && pieceBits[pIdx]) {
+                        if (isPieceRow)
+                            std::cout << "\033[1m1\033[0m";
+                        else
+                            std::cout << "\033[2m░\033[0m";  // dim ghost
+                    } else if (hasBit) {
+                        if (isPieceRow) {
+                            std::cout << "\033[1m0\033[0m";
+                            } else if (isGhostRow) {
+                                std::cout << "\033[2m░\033[0m";
+                            } else {
+                            std::cout << ' ';
+                        }
+                    } else {
                         std::cout << ' ';
+                    }
                 }
                 std::cout << "|\n";
             } else {
-                // Fully empty row
                 std::cout << "     |                |\n";
             }
         } else {
-            // Filled stack row
             int stackIndex = visRow - stackTop;
             const Board::Row& row = rows[stackIndex];
             const bool isPieceRow = piece && piece->getRow() == visRow;
+            const bool isGhostRow = piece && ghostRow == visRow && !isPieceRow;
 
             std::cout << opLabel(row.op) << " |";
 
-            const std::vector<bool>* pieceBits = isPieceRow ? &piece->getBits() : nullptr;
-            int pieceCol = isPieceRow ? piece->getCol() : -1;
+            const std::vector<bool>* pieceBits = (isPieceRow || isGhostRow) ? &piece->getBits() : nullptr;
+            int pieceCol = (isPieceRow || isGhostRow) ? piece->getCol() : -1;
 
             for (int c = 0; c < Board::WIDTH; ++c) {
                 int pIdx = c - pieceCol;
                 bool hasPieceBit = pieceBits &&
                                    pIdx >= 0 &&
-                                   pIdx < static_cast<int>(pieceBits->size());
-                if (hasPieceBit) {
-                    std::cout << ((*pieceBits)[pIdx] ? "\033[1m1\033[0m" : "\033[1m0\033[0m");
+                                   pIdx < static_cast<int>(pieceBits->size()) &&
+                                   (*pieceBits)[pIdx];
+
+                if (hasPieceBit && isPieceRow) {
+                    std::cout << "\033[1m1\033[0m";
+                } else if (hasPieceBit && isGhostRow) {
+                    std::cout << "\033[2m░\033[0m";
                 } else {
                     bool bit = c < static_cast<int>(row.bits.size()) && row.bits[c];
                     std::cout << (bit ? '1' : '.');
