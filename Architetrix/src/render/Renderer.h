@@ -45,6 +45,9 @@ class Renderer {
                        int score,
                        int level,
                        int personalRecord) const;
+    
+    // Flashy game over screen
+    void displayGameOver(int score, int level, int personalRecord, bool newRecord) const;
 };
 
 #endif

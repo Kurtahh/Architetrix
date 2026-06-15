@@ -279,3 +279,69 @@ void Renderer::clearScreen() {
 void Renderer::moveCursorHome() { 
     std::cout << "\033[H"; 
 }
+
+void Renderer::displayGameOver(int score, int level, int personalRecord, bool newRecord) const {
+    // Flashy game over animation
+    const char* patterns[] = {"#", "=", "~", "+", "*", "X"};
+    
+    for (int iteration = 0; iteration < 6; ++iteration) {
+        clearScreen();
+        
+        // Print centered GAME OVER with flashing colors
+        std::string colors[] = {"\033[1;31m", "\033[1;33m", "\033[1;36m", "\033[1;35m"};
+        std::string color = colors[iteration % 4];
+        
+        // Top border
+        std::cout << color;
+        for (int i = 0; i < 50; ++i) std::cout << patterns[iteration % 6];
+        std::cout << RESET << "\n\n";
+        
+        // GAME OVER text
+        std::cout << color << "\033[1m";
+        std::cout << "                     GAME OVER\n";
+        std::cout << RESET << "\n";
+        
+        // Stats
+        std::cout << color << "Final Score: " << RESET << score << "\n";
+        std::cout << color << "Level Reached: " << RESET << level << "\n";
+        
+        if (newRecord) {
+            std::cout << "\033[1;33m*** NEW HIGHSCORE ***" << RESET << " " << personalRecord << "\n";
+        } else {
+            std::cout << color << "Highscore: " << RESET << personalRecord << "\n";
+        }
+        
+        std::cout << "\n";
+        
+        // Bottom border
+        std::cout << color;
+        for (int i = 0; i < 50; ++i) std::cout << patterns[iteration % 6];
+        std::cout << RESET << "\n";
+        
+        std::cout << std::flush;
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
+    
+    // Final display (static)
+    clearScreen();
+    std::cout << "\033[1;37m";
+    for (int i = 0; i < 50; ++i) std::cout << "=";
+    std::cout << RESET << "\n\n";
+    
+    std::cout << "\033[1;31m" << "                     GAME OVER" << RESET << "\n\n";
+    
+    std::cout << "Final Score: " << score << "\n";
+    std::cout << "Level Reached: " << level << "\n";
+    
+    if (newRecord) {
+        std::cout << "\033[1;33m*** NEW HIGHSCORE: " << personalRecord << " ***" << RESET << "\n";
+    } else {
+        std::cout << "Highscore: " << personalRecord << "\n";
+    }
+    
+    std::cout << "\n";
+    std::cout << "\033[1;37m";
+    for (int i = 0; i < 50; ++i) std::cout << "=";
+    std::cout << RESET << "\n";
+    std::cout << std::flush;
+}

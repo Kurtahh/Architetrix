@@ -76,11 +76,7 @@ void GameLoop::run() {
 
     gRunning.store(false);
     gravThread.join();
-    if (newRecordThisGame_) {
-        std::cout << "\nGame over! New highscore: " << score_ << "\n";
-    } else {
-        std::cout << "\nGame over! Final score: " << score_ << "\n";
-    }
+
 }
 
 void GameLoop::handleInput(Action action) {
@@ -187,6 +183,9 @@ void GameLoop::endGame() {
     running_ = false;
     gRunning.store(false);
     state_ = GameState::GAME_ENDED;
+    
+    // Display flashy game over screen
+    renderer_.displayGameOver(score_, level_, scoreManager_.getPersonalRecord(), newRecordThisGame_);
 }
 
 int GameLoop::getScore() const { 
