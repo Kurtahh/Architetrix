@@ -137,7 +137,21 @@ void GameLoop::applyCollision() {
 
     bitwiseEngine_.applyPieceToBoard(board_, *fp);
 
+    // Save board state before clearing
+    auto rowsBeforeClear = board_.getRows();
+    
     auto clearResult = eliminationChecker_.checkAndClear(board_);
+    
+    // Perform visual flash animation if rows or columns were cleared
+    if (clearResult.rowsCleared > 0 || clearResult.colsCleared > 0) {
+        renderer_.flashClearRows(rowsBeforeClear,
+                                clearResult.clearedRowIndices,
+                                pieceController_->getUpcomingPiece(),
+                                pieceController_->getHeldPiece(),
+                                score_, level_,
+                                scoreManager_.getPersonalRecord());
+    }
+    
     score_ += clearResult.scoreGained;
     if (scoreManager_.updateRecord(score_)) {
         newRecordThisGame_ = true;
