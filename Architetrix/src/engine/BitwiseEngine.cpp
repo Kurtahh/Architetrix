@@ -38,6 +38,8 @@ bool BitwiseEngine::applyOp(bool pieceBit, bool boardBit, Board::Operator op) co
             return !(pieceBit && boardBit);
         case Board::Operator::NOR:  
             return !(pieceBit || boardBit);
+        case Board::Operator::XNOR: 
+            return pieceBit == boardBit;
         default: 
             return boardBit;
     }

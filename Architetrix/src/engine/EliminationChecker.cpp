@@ -22,6 +22,13 @@ EliminationChecker::ClearResult EliminationChecker::checkAndClear(Board& board) 
 
     result.perfectClear = (!fullRows.empty() && !fullCols.empty());
 
+    // Store the indices of rows that will be cleared (before removal)
+    result.clearedRowIndices = fullRows;
+    for (int r : emptyRows) {
+        if (std::find(result.clearedRowIndices.begin(), result.clearedRowIndices.end(), r) == result.clearedRowIndices.end())
+            result.clearedRowIndices.push_back(r);
+    }
+
     // Remove columns first (indices don't shift)
     // Remove in reverse order to preserve indices
     for (int i = static_cast<int>(fullCols.size()) - 1; i >= 0; --i)

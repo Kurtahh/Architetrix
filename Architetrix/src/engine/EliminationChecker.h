@@ -2,6 +2,7 @@
 #define ELIMINATION_CHECKER_H_096543
 
 #include "../board/Board.h"
+#include <vector>
 
 /// Checks for and clears full rows, full columns, and cross (perfect) clears.
 /// Returns the score for the current placement.
@@ -12,6 +13,7 @@ class EliminationChecker {
         int colsCleared = 0;
         bool perfectClear = false;  // simultaneous full row + full col
         int scoreGained = 0;
+        std::vector<int> clearedRowIndices;  // Indices of rows that were cleared
     };
 
     /// Scan the board, remove completed rows/cols, return scoring info.

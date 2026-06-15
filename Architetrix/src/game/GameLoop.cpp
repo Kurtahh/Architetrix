@@ -76,11 +76,7 @@ void GameLoop::run() {
 
     gRunning.store(false);
     gravThread.join();
-    if (newRecordThisGame_) {
-        std::cout << "\nGame over! New highscore: " << score_ << "\n";
-    } else {
-        std::cout << "\nGame over! Final score: " << score_ << "\n";
-    }
+
 }
 
 void GameLoop::handleInput(Action action) {
@@ -137,7 +133,21 @@ void GameLoop::applyCollision() {
 
     bitwiseEngine_.applyPieceToBoard(board_, *fp);
 
+    // Save board state before clearing
+    auto rowsBeforeClear = board_.getRows();
+    
     auto clearResult = eliminationChecker_.checkAndClear(board_);
+    
+    // Perform visual flash animation if rows or columns were cleared
+    if (clearResult.rowsCleared > 0 || clearResult.colsCleared > 0) {
+        renderer_.flashClearRows(rowsBeforeClear,
+                                clearResult.clearedRowIndices,
+                                pieceController_->getUpcomingPiece(),
+                                pieceController_->getHeldPiece(),
+                                score_, level_,
+                                scoreManager_.getPersonalRecord());
+    }
+    
     score_ += clearResult.scoreGained;
     if (scoreManager_.updateRecord(score_)) {
         newRecordThisGame_ = true;
@@ -173,6 +183,9 @@ void GameLoop::endGame() {
     running_ = false;
     gRunning.store(false);
     state_ = GameState::GAME_ENDED;
+    
+    // Display flashy game over screen
+    renderer_.displayGameOver(score_, level_, scoreManager_.getPersonalRecord(), newRecordThisGame_);
 }
 
 int GameLoop::getScore() const { 
@@ -194,9 +207,9 @@ int GameLoop::gravityMs() const {
 }
 
 int GameLoop::rowAddIntervalMs() const {
-    // 6000ms (6 seconds) at level 1, decreases by 300ms per level, floors at 1000ms (1 second)
-    int ms = 6000 - (level_ - 1) * 300;
-    return ms < 1000 ? 1000 : ms;
+    // 8000ms (8 seconds) at level 1, decreases by 200ms per level, floors at 2000ms (2 seconds)
+    int ms = 8000 - (level_ - 1) * 200;
+    return ms < 2000 ? 2000 : ms;
 }
 
 void GameLoop::checkAndAddRow() {
