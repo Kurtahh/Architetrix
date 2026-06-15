@@ -12,13 +12,15 @@ Board::Row RowGenerator::generate(int level) const {
 }
 
 Board::Operator RowGenerator::pickOperator(int level) const {
-    // Level thresholds: AND/OR always, XOR from level 3, NAND/NOR from level 5
+    // Level thresholds: unlock operators progressively
     int maxOp = 1;  // AND, OR only
     
-    if (level >= 3) 
+    if (level >= 2) 
         maxOp = 2;  // + XOR
-    if (level >= 5) 
+    if (level >= 3) 
         maxOp = 4;  // + NAND, NOR
+    if (level >= 4) 
+        maxOp = 5;  // + XNOR
 
     switch (rand() % (maxOp + 1)) {
         case 0: 
@@ -31,6 +33,8 @@ Board::Operator RowGenerator::pickOperator(int level) const {
             return Board::Operator::NAND;
         case 4: 
             return Board::Operator::NOR;
+        case 5: 
+            return Board::Operator::XNOR;
         default: 
             return Board::Operator::OR;
     }

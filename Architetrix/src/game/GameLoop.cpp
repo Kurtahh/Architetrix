@@ -194,9 +194,9 @@ int GameLoop::gravityMs() const {
 }
 
 int GameLoop::rowAddIntervalMs() const {
-    // 6000ms (6 seconds) at level 1, decreases by 300ms per level, floors at 1000ms (1 second)
-    int ms = 6000 - (level_ - 1) * 300;
-    return ms < 1000 ? 1000 : ms;
+    // 8000ms (8 seconds) at level 1, decreases by 200ms per level, floors at 2000ms (2 seconds)
+    int ms = 8000 - (level_ - 1) * 200;
+    return ms < 2000 ? 2000 : ms;
 }
 
 void GameLoop::checkAndAddRow() {

@@ -121,6 +121,8 @@ std::string Renderer::opLabel(Board::Operator op) {
             return "NAND";
         case Board::Operator::NOR:  
             return " NOR";
+        case Board::Operator::XNOR: 
+            return "XNOR";
         default: 
             return "  ??";
     }

@@ -6,7 +6,7 @@
 
 class Board {
     public:
-    enum class Operator { AND, OR, XOR, NAND, NOR };
+    enum class Operator { AND, OR, XOR, NAND, NOR, XNOR };
 
     struct Row {
         std::vector<bool> bits;
