@@ -38,9 +38,6 @@ class Board {
     /// Remove a single row by index (within the filled stack).
     void removeRow(int index);
 
-    /// Remove a single column across all rows.
-    void removeColumn(int col);
-
     /// Returns true if the stack has grown to fill the entire visible area.
     bool isOverflowed() const;
 

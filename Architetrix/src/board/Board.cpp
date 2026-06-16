@@ -34,20 +34,7 @@ void Board::removeRow(int index) {
     rows_.erase(rows_.begin() + index);
 }
 
-void Board::removeColumn(int col) {
-    if (col < 0 || col >= WIDTH)
-        throw std::out_of_range("Board::removeColumn: col out of range");
-    for (auto& row : rows_) {
-        // Ensure row is at full width, then set the column to 0
-        if (row.bits.size() < static_cast<size_t>(WIDTH)) {
-            row.bits.resize(WIDTH, false);
-        }
-        if (col < static_cast<int>(row.bits.size())) {
-            row.bits[col] = false;
-        }
-    }
-}
-
 bool Board::isOverflowed() const {
-    return getHeight() >= VISIBLE_HEIGHT;
+    // Game over when rows reach 2 from the top (leaving 2 safe rows)
+    return getHeight() >= (VISIBLE_HEIGHT - 2);
 }

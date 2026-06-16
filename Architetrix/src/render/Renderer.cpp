@@ -106,7 +106,11 @@ void Renderer::flashClearRows(const std::vector<Board::Row>& rowsBeforeClear,
 
                 // Draw the row bits
                 for (int c = 0; c < Board::WIDTH; ++c) {
-                    bool bit = c < static_cast<int>(row.bits.size()) && row.bits[c];
+                    // Safely access bits, treating out-of-bounds as false
+                    bool bit = false;
+                    if (c < static_cast<int>(row.bits.size())) {
+                        bit = row.bits[c];
+                    }
                     
                     if (isCleared) {
                         // Cleared row: flash white with symbols
@@ -116,7 +120,7 @@ void Renderer::flashClearRows(const std::vector<Board::Row>& rowsBeforeClear,
                             std::cout << "\033[1;37m" << symbols[flash] << RESET;
                         }
                     } else {
-                        // Normal row: use operator color
+                        // Normal row: use operator color (never changes during animation)
                         std::string opColor = getOpColor(row.op);
                         if (bit) {
                             std::cout << opColor << "1" << RESET;
