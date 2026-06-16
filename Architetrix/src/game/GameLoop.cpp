@@ -133,8 +133,11 @@ void GameLoop::applyCollision() {
 
     bitwiseEngine_.applyPieceToBoard(board_, *fp);
 
-    // Save board state before clearing
-    auto rowsBeforeClear = board_.getRows();
+    // Clear the falling piece BEFORE clearing rows so it doesn't interact with row shifts
+    pieceController_->clearFallingPiece();
+
+    // Save board state BEFORE clearing - make an explicit copy, not a reference!
+    std::vector<Board::Row> rowsBeforeClear = board_.getRows();
     
     auto clearResult = eliminationChecker_.checkAndClear(board_);
     

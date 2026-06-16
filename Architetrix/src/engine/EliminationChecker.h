@@ -4,29 +4,26 @@
 #include "../board/Board.h"
 #include <vector>
 
-/// Checks for and clears full rows, full columns, and cross (perfect) clears.
+/// Checks for and clears full rows and empty rows (no column clearing).
 /// Returns the score for the current placement.
 class EliminationChecker {
     public:
     struct ClearResult {
         int rowsCleared = 0;
-        int colsCleared = 0;
-        bool perfectClear = false;  // simultaneous full row + full col
+        int colsCleared = 0;  // Always 0
+        bool perfectClear = false;  // Always false
         int scoreGained = 0;
         std::vector<int> clearedRowIndices;  // Indices of rows that were cleared
     };
 
-    /// Scan the board, remove completed rows/cols, return scoring info.
+    /// Scan the board, remove completed rows, return scoring info.
     ClearResult checkAndClear(Board& board) const;
 
     private:
     /// A row is "full" when every bit is true.
     bool isRowFull(const Board::Row& row) const;
 
-    /// A column is "full" when every row has true at that index.
-    bool isColumnFull(const Board& board, int col) const;
-
-    /// A row is "empty" (basic clear) when every bit is false.
+    /// A row is "empty" when every bit is false.
     bool isRowEmpty(const Board::Row& row) const;
 
     int computeScore(const ClearResult& result) const;

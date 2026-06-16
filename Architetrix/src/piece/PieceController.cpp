@@ -90,6 +90,10 @@ const Piece* PieceController::getUpcomingPiece() const {
     return upcoming_.empty() ? nullptr : upcoming_.front();
 }
 
+void PieceController::clearFallingPiece() {
+    fallingPiece_.reset();
+}
+
 void PieceController::refillQueue(int n) {
     while (static_cast<int>(upcoming_.size()) < n)
         upcoming_.push_back(pickRandom());

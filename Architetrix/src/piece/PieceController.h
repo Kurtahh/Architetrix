@@ -56,6 +56,9 @@ class PieceController {
     const FallingPiece* getFallingPiece() const;
     const Piece* getUpcomingPiece() const;  //peek at next queued piece
     const Piece* getHeldPiece() const;
+
+    //clear the falling piece (called after it lands to prevent interaction issues)
+    void clearFallingPiece();
 };
 
 #endif
